@@ -1,0 +1,89 @@
+[project]
+name = "web-ui"
+version = "0.1.0"
+description = "InternLM Compass Web UI - A browser automation tool with AI agent"
+requires-python = ">=3.11"
+dependencies = [
+    "browser-use==0.1.40",
+    "pyperclip==1.9.0",
+    "gradio",
+    "json-repair",
+    "langchain-mistralai==0.2.4",
+    "langchain-google-genai==2.0.8",
+    "MainContentExtractor==0.0.4",
+    "python-dotenv",
+    "playwright",
+    "langchain-ollama",
+    "langchain>=0.3.25",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0",
+]
+index-url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+# 选择适合 Google Style 的规则
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "N",   # pep8-naming
+    "D",   # pydocstyle (docstring conventions)
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "SIM", # flake8-simplify
+]
+
+ignore = [
+    "E501", # line too long (handled by formatter)
+    "B006", # Do not use assert in tests
+    "B008", # Do not use assert in tests
+    "B009", # Do not use assertRaises in tests
+    "D100", # Missing docstring in public module
+    "D101", # Missing docstring in public class
+    "D102", # Missing docstring in public method
+    "D103", # Missing docstring in public function
+    "D104", # Missing docstring in public package
+    "D105", # Missing docstring in magic method
+    "D107", # Missing docstring in __init__
+    "D200", # One-line docstring should fit on one line with quotes
+    "D203", # 1 blank line required before class docstring
+    "D415", # Missing trailing punctuation in docstring
+    "E402", # module level import not at top of file
+]
+
+[tool.ruff.lint.pydocstyle]
+# 使用 Google 风格的 docstring
+convention = "google"
+
+[tool.ruff.lint.isort]
+# 配置 import 排序以符合 Google Style
+known-first-party = ["src"]
+section-order = [
+    "future",
+    "standard-library",
+    "third-party",
+    "first-party",
+    "local-folder",
+]
+
+[tool.ruff.format]
+# 使用双引号（Google Style 推荐）
+quote-style = "double"
+# 缩进风格
+indent-style = "space"
+# 保持尾随逗号
+skip-magic-trailing-comma = false

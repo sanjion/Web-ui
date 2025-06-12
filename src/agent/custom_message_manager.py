@@ -1,50 +1,41 @@
 from __future__ import annotations
 
 import logging
-import pdb
-from typing import List, Optional, Type, Dict
 
-from browser_use.agent.message_manager.service import MessageManager
-from browser_use.agent.message_manager.views import MessageHistory
-from browser_use.agent.prompts import SystemPrompt, AgentMessagePrompt
-from browser_use.agent.views import ActionResult, AgentStepInfo, ActionModel
-from browser_use.browser.views import BrowserState
-from browser_use.agent.message_manager.service import MessageManagerSettings
-from browser_use.agent.views import ActionResult, AgentOutput, AgentStepInfo, MessageManagerState
-from langchain_core.language_models import BaseChatModel
-from langchain_anthropic import ChatAnthropic
-from langchain_core.language_models import BaseChatModel
-from langchain_core.messages import (
-    AIMessage,
-    BaseMessage,
-    HumanMessage,
-    ToolMessage,
-    SystemMessage
+from browser_use.agent.message_manager.service import (
+    MessageManager,
+    MessageManagerSettings,
 )
-from langchain_openai import ChatOpenAI
-from ..utils.llm import DeepSeekR1ChatOpenAI
-from .custom_prompts import CustomAgentMessagePrompt
+from browser_use.agent.prompts import AgentMessagePrompt
+from browser_use.agent.views import (
+    ActionModel,
+    ActionResult,
+    AgentStepInfo,
+    MessageManagerState,
+)
+from browser_use.browser.views import BrowserState
+from langchain_core.messages import (
+    HumanMessage,
+    SystemMessage,
+)
 
 logger = logging.getLogger(__name__)
 
 
 class CustomMessageManagerSettings(MessageManagerSettings):
-    agent_prompt_class: Type[AgentMessagePrompt] = AgentMessagePrompt
+    agent_prompt_class: type[AgentMessagePrompt] = AgentMessagePrompt
 
 
 class CustomMessageManager(MessageManager):
     def __init__(
-            self,
-            task: str,
-            system_message: SystemMessage,
-            settings: MessageManagerSettings = MessageManagerSettings(),
-            state: MessageManagerState = MessageManagerState(),
+        self,
+        task: str,
+        system_message: SystemMessage,
+        settings: MessageManagerSettings = MessageManagerSettings(),
+        state: MessageManagerState = MessageManagerState(),
     ):
         super().__init__(
-            task=task,
-            system_message=system_message,
-            settings=settings,
-            state=state
+            task=task, system_message=system_message, settings=settings, state=state
         )
 
     def _init_messages(self) -> None:
@@ -53,15 +44,19 @@ class CustomMessageManager(MessageManager):
         self.context_content = ""
 
         if self.settings.message_context:
-            self.context_content += 'Context for the task' + self.settings.message_context
+            self.context_content += (
+                "Context for the task" + self.settings.message_context
+            )
 
         if self.settings.sensitive_data:
-            info = f'Here are placeholders for sensitive data: {list(self.settings.sensitive_data.keys())}'
-            info += 'To use them, write <secret>the placeholder name</secret>'
+            info = f"Here are placeholders for sensitive data: {list(self.settings.sensitive_data.keys())}"
+            info += "To use them, write <secret>the placeholder name</secret>"
             self.context_content += info
 
         if self.settings.available_file_paths:
-            filepaths_msg = f'Here are file paths you can use: {self.settings.available_file_paths}'
+            filepaths_msg = (
+                f"Here are file paths you can use: {self.settings.available_file_paths}"
+            )
             self.context_content += filepaths_msg
 
         if self.context_content:
@@ -74,16 +69,18 @@ class CustomMessageManager(MessageManager):
         min_message_len = 2 if self.context_content is not None else 1
 
         while diff > 0 and len(self.state.history.messages) > min_message_len:
-            self.state.history.remove_message(min_message_len)  # always remove the oldest message
+            self.state.history.remove_message(
+                min_message_len
+            )  # always remove the oldest message
             diff = self.state.history.current_tokens - self.settings.max_input_tokens
 
     def add_state_message(
-            self,
-            state: BrowserState,
-            actions: Optional[List[ActionModel]] = None,
-            result: Optional[List[ActionResult]] = None,
-            step_info: Optional[AgentStepInfo] = None,
-            use_vision=True,
+        self,
+        state: BrowserState,
+        actions: list[ActionModel] | None = None,
+        result: list[ActionResult] | None = None,
+        step_info: AgentStepInfo | None = None,
+        use_vision=True,
     ) -> None:
         """Add browser state as human message"""
         # otherwise add state message and result to next message (which will not stay in memory)

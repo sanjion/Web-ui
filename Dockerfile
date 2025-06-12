@@ -53,14 +53,17 @@ ARG TARGETPLATFORM=linux/amd64
 # Set up working directory
 WORKDIR /app
 
-# Copy requirements and install Python dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
+
+# Copy project configuration and install Python dependencies
+COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen --no-install-project
 
 # Install Playwright and browsers with system dependencies
 ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
-RUN playwright install --with-deps chromium
-RUN playwright install-deps
+RUN uv run playwright install --with-deps chromium
+RUN uv run playwright install-deps
 
 # Copy the application code
 COPY . .

@@ -25,9 +25,11 @@ logger = logging.getLogger(__name__)
 
 
 class CustomController(Controller):
-    def __init__(self, exclude_actions: list[str] = [],
-                 output_model: Optional[Type[BaseModel]] = None
-                 ):
+    def __init__(
+        self,
+        exclude_actions: list[str] = [],
+        output_model: Optional[Type[BaseModel]] = None,
+    ):
         super().__init__(exclude_actions=exclude_actions, output_model=output_model)
         self._register_custom_actions()
 

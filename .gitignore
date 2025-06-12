@@ -123,7 +123,6 @@ celerybeat.pid
 
 # Environments
 .env
-.venv
 env/
 venv/
 ENV/
@@ -132,6 +131,9 @@ venv.bak/
 test_env/
 myenv
 
+# UV specific
+.venv/
+uv.lock
 
 # Spyder project settings
 .spyderproject
@@ -160,12 +162,11 @@ cython_debug/
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
-#  and can be added to the global gitignore or merged into this file.  For a more nuclear
+#  and can be added to the global gitignore or merged into this project's .gitignore.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 temp
 tmp
-
 
 .DS_Store
 

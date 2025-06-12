@@ -1,3 +1,55 @@
+# Browser Use WebUI
+
+## Refine Description 修改说明
+
+原有代码存在部分配置问题，可能导致部分用户无法直接按照参照成功运行。
+结合 uv 项目的概况，对该项目进行了优化调整，提升运行时间。
+
+## 快速上手
+
+使用 uv 作为 Python 环境管理工具，降低用户配置成本。
+
+### 1. 安装 uv (如果尚未安装)
+
+Windows 用户打开 PowerShell，执行以下命令：
+
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+Unix/macOS 用户打开终端，执行以下命令：
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+### 2. 创建环境并安装依赖
+
+```bash
+uv sync --no-install-project
+```
+
+以上命令会创建一个虚拟环境并安装所有依赖。
+
+### 3. 本地运行运行项目
+
+```bash
+uv run python webui.py --ip 0.0.0.0 --port 7788
+```
+
+### 4. 访问 WebUI
+
+打开浏览器，访问 `http://localhost:7788` 即可使用 WebUI
+
+1. 点击 `🔧 LLM Settings` Tab，配置 LLM API 密钥
+
+    > 书生模型的秘钥可[从此获取](https://internlm.intern-ai.org.cn/api/tokens)
+
+2. 点击 `🤖 Run Agent` Tab，开始输入任务描述后，点击 `▶️ Run Agent` 开始执行Agent工作流
+3. 点击 `🎥 Recordings` Tab，查看工作流的操作记录
+
+--------------
+
 <img src="./assets/web-ui.png" alt="Browser Use Web UI" width="full"/>
 
 <br/>
@@ -24,6 +76,7 @@ We would like to officially thank [WarmShao](https://github.com/warmshao) for hi
 ## Installation Guide
 
 ### Prerequisites
+
 - Python 3.11 or higher
 - Git (for cloning the repository)
 
@@ -32,99 +85,128 @@ We would like to officially thank [WarmShao](https://github.com/warmshao) for hi
 Read the [quickstart guide](https://docs.browser-use.com/quickstart#prepare-the-environment) or follow the steps below to get started.
 
 #### Step 1: Clone the Repository
+
 ```bash
 git clone https://github.com/browser-use/web-ui.git
 cd web-ui
 ```
 
 #### Step 2: Set Up Python Environment
+
 We recommend using [uv](https://docs.astral.sh/uv/) for managing the Python environment.
 
 Using uv (recommended):
+
 ```bash
 uv venv --python 3.11
 ```
 
 Activate the virtual environment:
+
 - Windows (Command Prompt):
+
 ```cmd
 .venv\Scripts\activate
 ```
+
 - Windows (PowerShell):
+
 ```powershell
 .\.venv\Scripts\Activate.ps1
 ```
+
 - macOS/Linux:
+
 ```bash
 source .venv/bin/activate
 ```
 
 #### Step 3: Install Dependencies
+
 Install Python packages:
+
 ```bash
 uv pip install -r requirements.txt
 ```
 
 Install Browsers in Playwright:
 You can install specific browsers by running:
+
 ```bash
 playwright install --with-deps chromium
 ```
 
 To install all browsers:
+
 ```bash
 playwright install
 ```
 
 #### Step 4: Configure Environment
+
 1. Create a copy of the example environment file:
+
 - Windows (Command Prompt):
+
 ```bash
 copy .env.example .env
 ```
+
 - macOS/Linux/Windows (PowerShell):
+
 ```bash
 cp .env.example .env
 ```
+
 2. Open `.env` in your preferred text editor and add your API keys and other settings
 
 ### Option 2: Docker Installation
 
 #### Prerequisites
+
 - Docker and Docker Compose installed
   - [Docker Desktop](https://www.docker.com/products/docker-desktop/) (For Windows/macOS)
   - [Docker Engine](https://docs.docker.com/engine/install/) and [Docker Compose](https://docs.docker.com/compose/install/) (For Linux)
 
 #### Installation Steps
+
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/browser-use/web-ui.git
 cd web-ui
 ```
 
 2. Create and configure environment file:
+
 - Windows (Command Prompt):
+
 ```bash
 copy .env.example .env
 ```
+
 - macOS/Linux/Windows (PowerShell):
+
 ```bash
 cp .env.example .env
 ```
+
 Edit `.env` with your preferred text editor and add your API keys
 
 3. Run with Docker:
+
 ```bash
 # Build and start the container with default settings (browser closes after AI tasks)
 docker compose up --build
 ```
+
 ```bash
 # Or run with persistent browser (browser stays open between AI tasks)
 CHROME_PERSISTENT_SESSION=true docker compose up --build
 ```
 
-
 4. Access the Application:
+
 - Web Interface: Open `http://localhost:7788` in your browser
 - VNC Viewer (for watching browser interactions): Open `http://localhost:6080/vnc.html`
   - Default VNC password: "youvncpassword"
@@ -133,11 +215,14 @@ CHROME_PERSISTENT_SESSION=true docker compose up --build
 ## Usage
 
 ### Local Setup
-1.  **Run the WebUI:**
+
+1. **Run the WebUI:**
     After completing the installation steps above, start the application:
+
     ```bash
     python webui.py --ip 127.0.0.1 --port 7788
     ```
+
 2. WebUI options:
    - `--ip`: The IP address to bind the WebUI to. Default is `127.0.0.1`.
    - `--port`: The port to bind the WebUI to. Default is `7788`.
@@ -150,20 +235,24 @@ CHROME_PERSISTENT_SESSION=true docker compose up --build
      - **Citrus**: A vibrant, citrus-inspired palette with bright and fresh colors.
      - **Ocean** (default): A blue, ocean-inspired theme providing a calming effect.
    - `--dark-mode`: Enables dark mode for the user interface.
-3.  **Access the WebUI:** Open your web browser and navigate to `http://127.0.0.1:7788`.
-4.  **Using Your Own Browser(Optional):**
+3. **Access the WebUI:** Open your web browser and navigate to `http://127.0.0.1:7788`.
+4. **Using Your Own Browser(Optional):**
     - Set `CHROME_PATH` to the executable path of your browser and `CHROME_USER_DATA` to the user data directory of your browser. Leave `CHROME_USER_DATA` empty if you want to use local user data.
       - Windows
+
         ```env
          CHROME_PATH="C:\Program Files\Google\Chrome\Application\chrome.exe"
          CHROME_USER_DATA="C:\Users\YourUsername\AppData\Local\Google\Chrome\User Data"
         ```
+
         > Note: Replace `YourUsername` with your actual Windows username for Windows systems.
       - Mac
+
         ```env
          CHROME_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
          CHROME_USER_DATA="/Users/YourUsername/Library/Application Support/Google/Chrome"
         ```
+
     - Close all Chrome windows
     - Open the WebUI in a non-Chrome browser, such as Firefox or Edge. This is important because the persistent browser context will use the Chrome data when running the agent.
     - Check the "Use Own Browser" option within the Browser Settings.
@@ -171,9 +260,11 @@ CHROME_PERSISTENT_SESSION=true docker compose up --build
     - Set `CHROME_PERSISTENT_SESSION=true` in the `.env` file.
 
 ### Docker Setup
+
 1. **Environment Variables:**
    - All configuration is done through the `.env` file
    - Available environment variables:
+
      ```
      # LLM API Keys
      OPENAI_API_KEY=your_key_here
@@ -213,6 +304,7 @@ CHROME_PERSISTENT_SESSION=true docker compose up --build
    - You can now see all browser interactions in real-time
 
 5. **Container Management:**
+
    ```bash
    # Start with persistent browser
    CHROME_PERSISTENT_SESSION=true docker compose up -d
@@ -228,6 +320,7 @@ CHROME_PERSISTENT_SESSION=true docker compose up --build
    ```
 
 ## Changelog
+
 - [x] **2025/01/26:** Thanks to @vvincent1234. Now browser-use-webui can combine with DeepSeek-r1 to engage in deep thinking!
 - [x] **2025/01/10:** Thanks to @casistack. Now we have Docker Setup option and also Support keep browser open between tasks.[Video tutorial demo](https://github.com/browser-use/web-ui/issues/1#issuecomment-2582511750).
 - [x] **2025/01/06:** Thanks to @richard-devbot. A New and Well-Designed WebUI is released. [Video tutorial demo](https://github.com/warmshao/browser-use-webui/issues/1#issuecomment-2573393113).

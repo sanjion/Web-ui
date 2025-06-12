@@ -63,21 +63,21 @@ async def test_browser_use_org():
         )
     )
     async with await browser.new_context(
-            config=BrowserContextConfig(
-                trace_path="./tmp/traces",
-                save_recording_path="./tmp/record_videos",
-                no_viewport=False,
-                browser_window_size=BrowserContextWindowSize(
-                    width=window_w, height=window_h
-                ),
-            )
+        config=BrowserContextConfig(
+            trace_path="./tmp/traces",
+            save_recording_path="./tmp/record_videos",
+            no_viewport=False,
+            browser_window_size=BrowserContextWindowSize(
+                width=window_w, height=window_h
+            ),
+        )
     ) as browser_context:
         agent = Agent(
             task="go to google.com and type 'OpenAI' click search and give me the first url",
             llm=llm,
             browser_context=browser_context,
             use_vision=use_vision,
-            tool_calling_method=tool_calling_method
+            tool_calling_method=tool_calling_method,
         )
         history: AgentHistoryList = await agent.run(max_steps=10)
 
@@ -130,13 +130,11 @@ async def test_browser_use_custom():
         provider="google",
         model_name="gemini-2.0-flash",
         temperature=0.6,
-        api_key=os.getenv("GOOGLE_API_KEY", "")
+        api_key=os.getenv("GOOGLE_API_KEY", ""),
     )
 
     llm = utils.get_llm_model(
-        provider="deepseek",
-        model_name="deepseek-reasoner",
-        temperature=0.8
+        provider="deepseek", model_name="deepseek-reasoner", temperature=0.8
     )
 
     # llm = utils.get_llm_model(
@@ -203,7 +201,7 @@ async def test_browser_use_custom():
             agent_prompt_class=CustomAgentMessagePrompt,
             use_vision=use_vision,
             max_actions_per_step=max_actions_per_step,
-            generate_gif=True
+            generate_gif=True,
         )
         history: AgentHistoryList = await agent.run(max_steps=100)
 
@@ -219,7 +217,6 @@ async def test_browser_use_custom():
 
         print("\nThoughts:")
         pprint(history.model_thoughts(), indent=4)
-
 
     except Exception:
         import traceback
@@ -270,7 +267,7 @@ async def test_browser_use_parallel():
         provider="gemini",
         model_name="gemini-2.0-flash-exp",
         temperature=1.0,
-        api_key=os.getenv("GOOGLE_API_KEY", "")
+        api_key=os.getenv("GOOGLE_API_KEY", ""),
     )
 
     # llm = utils.get_llm_model(
@@ -307,7 +304,9 @@ async def test_browser_use_parallel():
         config=BrowserConfig(
             disable_security=True,
             headless=False,
-            new_context_config=BrowserContextConfig(save_recording_path='./tmp/recordings'),
+            new_context_config=BrowserContextConfig(
+                save_recording_path="./tmp/recordings"
+            ),
         )
     )
 
@@ -315,10 +314,10 @@ async def test_browser_use_parallel():
         agents = [
             Agent(task=task, llm=llm, browser=browser)
             for task in [
-                'Search Google for weather in Tokyo',
-                'Check Reddit front page title',
-                'Find NASA image of the day',
-                'Check top story on CNN',
+                "Search Google for weather in Tokyo",
+                "Check Reddit front page title",
+                "Find NASA image of the day",
+                "Check top story on CNN",
                 # 'Search latest SpaceX launch date',
                 # 'Look up population of Paris',
                 # 'Find current time in Sydney',

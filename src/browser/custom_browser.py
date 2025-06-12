@@ -20,9 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 class CustomBrowser(Browser):
-
     async def new_context(
-            self,
-            config: BrowserContextConfig = BrowserContextConfig()
+        self, config: BrowserContextConfig = BrowserContextConfig()
     ) -> CustomBrowserContext:
         return CustomBrowserContext(config=config, browser=self)
